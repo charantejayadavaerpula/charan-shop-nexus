@@ -3,17 +3,22 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useCart } from "@/contexts/CartContext";
+import { useWishlist } from "@/contexts/WishlistContext";
 
 const Navigation = () => {
-  const [cartCount] = useState(3);
-  const [wishlistCount] = useState(5);
+  const navigate = useNavigate();
+  const { totalItems: cartCount } = useCart();
+  const { totalItems: wishlistCount } = useWishlist();
+  const [searchQuery, setSearchQuery] = useState("");
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <nav className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between gap-4">
           {/* Logo */}
-          <div className="flex-shrink-0">
+          <div className="flex-shrink-0 cursor-pointer" onClick={() => navigate("/")}>
             <h1 className="font-audiowide text-xl sm:text-2xl font-bold tracking-tight">
               CHARAN
             </h1>
@@ -27,6 +32,8 @@ const Navigation = () => {
                 type="search"
                 placeholder="Search products..."
                 className="w-full pl-10 bg-muted/50 border-0 focus-visible:ring-1"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
               />
             </div>
           </div>
@@ -40,7 +47,7 @@ const Navigation = () => {
             </Button>
 
             {/* Wishlist */}
-            <Button variant="ghost" size="icon" className="relative">
+            <Button variant="ghost" size="icon" className="relative" onClick={() => navigate("/wishlist")}>
               <Heart className="h-5 w-5" />
               {wishlistCount > 0 && (
                 <Badge 
@@ -54,7 +61,7 @@ const Navigation = () => {
             </Button>
 
             {/* Cart */}
-            <Button variant="ghost" size="icon" className="relative">
+            <Button variant="ghost" size="icon" className="relative" onClick={() => navigate("/cart")}>
               <ShoppingCart className="h-5 w-5" />
               {cartCount > 0 && (
                 <Badge 
@@ -68,7 +75,7 @@ const Navigation = () => {
             </Button>
 
             {/* Profile */}
-            <Button variant="ghost" size="icon">
+            <Button variant="ghost" size="icon" onClick={() => navigate("/profile")}>
               <User className="h-5 w-5" />
               <span className="sr-only">Profile</span>
             </Button>
@@ -83,6 +90,8 @@ const Navigation = () => {
               type="search"
               placeholder="Search products..."
               className="w-full pl-10 bg-muted/50 border-0 focus-visible:ring-1"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
             />
           </div>
         </div>
