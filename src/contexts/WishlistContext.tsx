@@ -2,7 +2,7 @@ import { createContext, useContext, useState, ReactNode } from "react";
 import { toast } from "sonner";
 
 export interface WishlistItem {
-  id: number;
+  id: string;
   name: string;
   price: number;
   image: string;
@@ -12,8 +12,8 @@ export interface WishlistItem {
 interface WishlistContextType {
   items: WishlistItem[];
   addItem: (item: WishlistItem) => void;
-  removeItem: (id: number) => void;
-  isInWishlist: (id: number) => boolean;
+  removeItem: (id: string) => void;
+  isInWishlist: (id: string) => boolean;
   totalItems: number;
 }
 
@@ -33,12 +33,12 @@ export const WishlistProvider = ({ children }: { children: ReactNode }) => {
     });
   };
 
-  const removeItem = (id: number) => {
+  const removeItem = (id: string) => {
     setItems((prev) => prev.filter((i) => i.id !== id));
     toast.success("Removed from wishlist");
   };
 
-  const isInWishlist = (id: number) => {
+  const isInWishlist = (id: string) => {
     return items.some((i) => i.id === id);
   };
 
