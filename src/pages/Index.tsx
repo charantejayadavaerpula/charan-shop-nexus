@@ -56,7 +56,7 @@ const Index = () => {
         <Hero />
         
         {/* Products Section */}
-        <section className="py-12 lg:py-20">
+        <section id="products" className="py-12 lg:py-20">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="mb-12 text-center">
               <h2 className="text-3xl sm:text-4xl font-bold mb-4">
