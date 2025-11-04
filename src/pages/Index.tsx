@@ -45,10 +45,10 @@ const Index = () => {
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="mb-12 text-center">
               <h2 className="text-3xl sm:text-4xl font-bold mb-4">
-                Featured Products
+                Featured Components
               </h2>
               <p className="text-muted-foreground max-w-2xl mx-auto">
-                Carefully selected pieces that embody our commitment to quality and design excellence
+                High-quality development boards, sensors, and modules for your electronics projects
               </p>
             </div>
             
@@ -75,8 +75,8 @@ const Index = () => {
       <footer className="border-t py-12 mt-20">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center text-sm text-muted-foreground">
-            <p className="font-audiowide text-lg mb-2">CHARAN</p>
-            <p>© 2024 CHARAN. All rights reserved.</p>
+            <p className="font-audiowide text-lg mb-2">CHARAN ELECTRONICS</p>
+            <p>© 2024 CHARAN. Your trusted source for maker electronics.</p>
           </div>
         </div>
       </footer>
