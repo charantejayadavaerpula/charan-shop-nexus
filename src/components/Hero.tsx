@@ -30,7 +30,7 @@ const Hero = () => {
           </div>
 
           {/* Image */}
-          <div className="relative">
+          <div className="relative hidden lg:block">
             <div className="aspect-square lg:aspect-[4/3] overflow-hidden rounded-2xl shadow-2xl">
               <img
                 src={heroImage}
