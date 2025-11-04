@@ -2,8 +2,7 @@ import { Search, ShoppingCart, Heart, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { useCart } from "@/contexts/CartContext";
 import { useWishlist } from "@/contexts/WishlistContext";
 
@@ -11,7 +10,19 @@ const Navigation = () => {
   const navigate = useNavigate();
   const { totalItems: cartCount } = useCart();
   const { totalItems: wishlistCount } = useWishlist();
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchParams, setSearchParams] = useSearchParams();
+  const searchQuery = searchParams.get("search") || "";
+
+  const handleSearchChange = (value: string) => {
+    if (value) {
+      setSearchParams({ search: value });
+    } else {
+      setSearchParams({});
+    }
+    if (window.location.pathname !== "/") {
+      navigate(`/?search=${encodeURIComponent(value)}`);
+    }
+  };
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -33,7 +44,7 @@ const Navigation = () => {
                 placeholder="Search components..."
                 className="w-full pl-10 bg-muted/50 border-0 focus-visible:ring-1"
                 value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
+                onChange={(e) => handleSearchChange(e.target.value)}
               />
             </div>
           </div>
@@ -91,7 +102,7 @@ const Navigation = () => {
               placeholder="Search components..."
               className="w-full pl-10 bg-muted/50 border-0 focus-visible:ring-1"
               value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+              onChange={(e) => handleSearchChange(e.target.value)}
             />
           </div>
         </div>

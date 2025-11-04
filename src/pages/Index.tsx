@@ -1,8 +1,9 @@
 import Navigation from "@/components/Navigation";
 import Hero from "@/components/Hero";
 import ProductCard from "@/components/ProductCard";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { useSearchParams } from "react-router-dom";
 
 interface Product {
   id: string;
@@ -15,6 +16,20 @@ interface Product {
 const Index = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
+  const [searchParams] = useSearchParams();
+  const searchQuery = searchParams.get("search") || "";
+
+  const filteredProducts = useMemo(() => {
+    if (!searchQuery.trim()) return products;
+    
+    const query = searchQuery.toLowerCase();
+    return products.filter(
+      (product) =>
+        product.name.toLowerCase().includes(query) ||
+        product.category.toLowerCase().includes(query) ||
+        (product as any).description?.toLowerCase().includes(query)
+    );
+  }, [products, searchQuery]);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -57,12 +72,14 @@ const Index = () => {
                 <div className="col-span-full text-center py-12">
                   <p className="text-muted-foreground">Loading products...</p>
                 </div>
-              ) : products.length === 0 ? (
+              ) : filteredProducts.length === 0 ? (
                 <div className="col-span-full text-center py-12">
-                  <p className="text-muted-foreground">No products available</p>
+                  <p className="text-muted-foreground">
+                    {searchQuery ? `No products found for "${searchQuery}"` : "No products available"}
+                  </p>
                 </div>
               ) : (
-                products.map((product) => (
+                filteredProducts.map((product) => (
                   <ProductCard key={product.id} {...product} />
                 ))
               )}
