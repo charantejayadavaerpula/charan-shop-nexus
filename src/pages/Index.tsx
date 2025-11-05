@@ -1,5 +1,6 @@
 import Navigation from "@/components/Navigation";
 import Hero from "@/components/Hero";
+import PromoBanner from "@/components/PromoBanner";
 import ProductCard from "@/components/ProductCard";
 import { useEffect, useState, useMemo } from "react";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -72,6 +73,7 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-background">
       <Navigation />
+      <PromoBanner />
       <main>
         <div className="hidden lg:block">
           <Hero />
@@ -82,11 +84,8 @@ const Index = () => {
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="mb-8 lg:mb-12 text-center">
               <h2 className="text-3xl sm:text-4xl font-bold mb-4">
-                Featured Components
+                Products
               </h2>
-              <p className="text-muted-foreground max-w-2xl mx-auto hidden lg:block">
-                High-quality development boards, sensors, and modules for your electronics projects
-              </p>
             </div>
 
             {/* Category Tabs */}
