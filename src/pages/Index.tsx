@@ -5,6 +5,7 @@ import { useEffect, useState, useMemo } from "react";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { supabase } from "@/integrations/supabase/client";
 import { useSearchParams } from "react-router-dom";
+import { preloadImages } from "@/hooks/useImagePreloader";
 
 interface Product {
   id: string;
@@ -59,6 +60,8 @@ const Index = () => {
         console.error("Error fetching products:", error);
       } else if (data) {
         setProducts(data);
+        // Preload all product images
+        preloadImages(data.map(p => p.image));
       }
       setLoading(false);
     };

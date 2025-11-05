@@ -4,7 +4,7 @@ import { Card } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useCart } from "@/contexts/CartContext";
 import { useWishlist } from "@/contexts/WishlistContext";
-import { useState } from "react";
+import { useImagePreloader } from "@/hooks/useImagePreloader";
 
 interface ProductCardProps {
   id: string;
@@ -18,7 +18,7 @@ const ProductCard = ({ id, name, price, image, category }: ProductCardProps) => 
   const { addItem: addToCart } = useCart();
   const { addItem: addToWishlist, removeItem: removeFromWishlist, isInWishlist } = useWishlist();
   const isWishlisted = isInWishlist(id);
-  const [imageLoaded, setImageLoaded] = useState(false);
+  const imageLoaded = useImagePreloader(image);
 
   const handleWishlistToggle = () => {
     if (isWishlisted) {
@@ -42,8 +42,8 @@ const ProductCard = ({ id, name, price, image, category }: ProductCardProps) => 
           src={image}
           alt={name}
           loading="lazy"
-          onLoad={() => setImageLoaded(true)}
-          className={`h-full w-full object-cover transition-transform duration-500 group-hover:scale-105 ${
+          decoding="async"
+          className={`h-full w-full object-cover transition-all duration-300 group-hover:scale-105 ${
             imageLoaded ? 'opacity-100' : 'opacity-0'
           }`}
         />
