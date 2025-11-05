@@ -1,8 +1,10 @@
 import { Heart, ShoppingCart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
 import { useCart } from "@/contexts/CartContext";
 import { useWishlist } from "@/contexts/WishlistContext";
+import { useState } from "react";
 
 interface ProductCardProps {
   id: string;
@@ -16,6 +18,7 @@ const ProductCard = ({ id, name, price, image, category }: ProductCardProps) => 
   const { addItem: addToCart } = useCart();
   const { addItem: addToWishlist, removeItem: removeFromWishlist, isInWishlist } = useWishlist();
   const isWishlisted = isInWishlist(id);
+  const [imageLoaded, setImageLoaded] = useState(false);
 
   const handleWishlistToggle = () => {
     if (isWishlisted) {
@@ -32,10 +35,17 @@ const ProductCard = ({ id, name, price, image, category }: ProductCardProps) => 
   return (
     <Card className="group overflow-hidden border-0 shadow-[var(--shadow-card)] hover:shadow-[var(--shadow-card-hover)] transition-all duration-300">
       <div className="relative aspect-square overflow-hidden bg-muted/30">
+        {!imageLoaded && (
+          <Skeleton className="absolute inset-0 h-full w-full" />
+        )}
         <img
           src={image}
           alt={name}
-          className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+          loading="lazy"
+          onLoad={() => setImageLoaded(true)}
+          className={`h-full w-full object-cover transition-transform duration-500 group-hover:scale-105 ${
+            imageLoaded ? 'opacity-100' : 'opacity-0'
+          }`}
         />
         <Button
           variant="ghost"
