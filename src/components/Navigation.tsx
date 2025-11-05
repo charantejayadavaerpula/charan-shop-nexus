@@ -5,17 +5,21 @@ import { Badge } from "@/components/ui/badge";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useCart } from "@/contexts/CartContext";
 import { useWishlist } from "@/contexts/WishlistContext";
-
 const Navigation = () => {
   const navigate = useNavigate();
-  const { totalItems: cartCount } = useCart();
-  const { totalItems: wishlistCount } = useWishlist();
+  const {
+    totalItems: cartCount
+  } = useCart();
+  const {
+    totalItems: wishlistCount
+  } = useWishlist();
   const [searchParams, setSearchParams] = useSearchParams();
   const searchQuery = searchParams.get("search") || "";
-
   const handleSearchChange = (value: string) => {
     if (value) {
-      setSearchParams({ search: value });
+      setSearchParams({
+        search: value
+      });
     } else {
       setSearchParams({});
     }
@@ -23,9 +27,7 @@ const Navigation = () => {
       navigate(`/?search=${encodeURIComponent(value)}`);
     }
   };
-
-  return (
-    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+  return <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <nav className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between gap-4">
           {/* Logo */}
@@ -39,49 +41,30 @@ const Navigation = () => {
           <div className="hidden md:flex flex-1 max-w-md mx-8">
             <div className="relative w-full">
               <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-              <Input
-                type="search"
-                placeholder="Search components..."
-                className="w-full pl-10 bg-muted/50 border-0 focus-visible:ring-1"
-                value={searchQuery}
-                onChange={(e) => handleSearchChange(e.target.value)}
-              />
+              <Input type="search" placeholder="Search components..." className="w-full pl-10 bg-muted/50 border-0 focus-visible:ring-1" value={searchQuery} onChange={e => handleSearchChange(e.target.value)} />
             </div>
           </div>
 
           {/* Action Icons */}
           <div className="flex items-center gap-2 sm:gap-4">
             {/* Mobile Search Icon */}
-            <Button variant="ghost" size="icon" className="md:hidden">
-              <Search className="h-5 w-5" />
-              <span className="sr-only">Search</span>
-            </Button>
+            
 
             {/* Wishlist */}
             <Button variant="ghost" size="icon" className="relative" onClick={() => navigate("/wishlist")}>
               <Heart className="h-5 w-5" />
-              {wishlistCount > 0 && (
-                <Badge 
-                  variant="destructive" 
-                  className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0 text-xs"
-                >
+              {wishlistCount > 0 && <Badge variant="destructive" className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0 text-xs">
                   {wishlistCount}
-                </Badge>
-              )}
+                </Badge>}
               <span className="sr-only">Wishlist</span>
             </Button>
 
             {/* Cart */}
             <Button variant="ghost" size="icon" className="relative" onClick={() => navigate("/cart")}>
               <ShoppingCart className="h-5 w-5" />
-              {cartCount > 0 && (
-                <Badge 
-                  variant="destructive" 
-                  className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0 text-xs"
-                >
+              {cartCount > 0 && <Badge variant="destructive" className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0 text-xs">
                   {cartCount}
-                </Badge>
-              )}
+                </Badge>}
               <span className="sr-only">Shopping cart</span>
             </Button>
 
@@ -97,18 +80,10 @@ const Navigation = () => {
         <div className="md:hidden pb-4">
           <div className="relative w-full">
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-            <Input
-              type="search"
-              placeholder="Search components..."
-              className="w-full pl-10 bg-muted/50 border-0 focus-visible:ring-1"
-              value={searchQuery}
-              onChange={(e) => handleSearchChange(e.target.value)}
-            />
+            <Input type="search" placeholder="Search components..." className="w-full pl-10 bg-muted/50 border-0 focus-visible:ring-1" value={searchQuery} onChange={e => handleSearchChange(e.target.value)} />
           </div>
         </div>
       </nav>
-    </header>
-  );
+    </header>;
 };
-
 export default Navigation;
