@@ -2,6 +2,7 @@ import Navigation from "@/components/Navigation";
 import Hero from "@/components/Hero";
 import ProductCard from "@/components/ProductCard";
 import { useEffect, useState, useMemo } from "react";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { supabase } from "@/integrations/supabase/client";
 import { useSearchParams } from "react-router-dom";
 
@@ -18,18 +19,34 @@ const Index = () => {
   const [loading, setLoading] = useState(true);
   const [searchParams] = useSearchParams();
   const searchQuery = searchParams.get("search") || "";
+  const [selectedCategory, setSelectedCategory] = useState<string>("all");
+
+  const categories = useMemo(() => {
+    const uniqueCategories = Array.from(new Set(products.map(p => p.category)));
+    return ["all", ...uniqueCategories];
+  }, [products]);
 
   const filteredProducts = useMemo(() => {
-    if (!searchQuery.trim()) return products;
+    let filtered = products;
     
-    const query = searchQuery.toLowerCase();
-    return products.filter(
-      (product) =>
-        product.name.toLowerCase().includes(query) ||
-        product.category.toLowerCase().includes(query) ||
-        (product as any).description?.toLowerCase().includes(query)
-    );
-  }, [products, searchQuery]);
+    // Filter by category
+    if (selectedCategory !== "all") {
+      filtered = filtered.filter(p => p.category === selectedCategory);
+    }
+    
+    // Filter by search query
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase();
+      filtered = filtered.filter(
+        (product) =>
+          product.name.toLowerCase().includes(query) ||
+          product.category.toLowerCase().includes(query) ||
+          (product as any).description?.toLowerCase().includes(query)
+      );
+    }
+    
+    return filtered;
+  }, [products, searchQuery, selectedCategory]);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -53,18 +70,37 @@ const Index = () => {
     <div className="min-h-screen bg-background">
       <Navigation />
       <main>
-        <Hero />
+        <div className="hidden lg:block">
+          <Hero />
+        </div>
         
         {/* Products Section */}
-        <section id="products" className="py-12 lg:py-20">
+        <section id="products" className="py-8 lg:py-20">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="mb-12 text-center">
+            <div className="mb-8 lg:mb-12 text-center">
               <h2 className="text-3xl sm:text-4xl font-bold mb-4">
                 Featured Components
               </h2>
-              <p className="text-muted-foreground max-w-2xl mx-auto">
+              <p className="text-muted-foreground max-w-2xl mx-auto hidden lg:block">
                 High-quality development boards, sensors, and modules for your electronics projects
               </p>
+            </div>
+
+            {/* Category Tabs */}
+            <div className="mb-8 flex justify-center">
+              <Tabs value={selectedCategory} onValueChange={setSelectedCategory} className="w-full">
+                <TabsList className="w-full flex-wrap h-auto gap-2 bg-muted/50">
+                  {categories.map((category) => (
+                    <TabsTrigger 
+                      key={category} 
+                      value={category}
+                      className="capitalize"
+                    >
+                      {category === "all" ? "All Products" : category}
+                    </TabsTrigger>
+                  ))}
+                </TabsList>
+              </Tabs>
             </div>
             
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
