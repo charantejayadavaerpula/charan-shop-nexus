@@ -3,7 +3,7 @@ import Hero from "@/components/Hero";
 import PromoBanner from "@/components/PromoBanner";
 import ProductCard from "@/components/ProductCard";
 import { useEffect, useState, useMemo } from "react";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+
 import { supabase } from "@/integrations/supabase/client";
 import { useSearchParams } from "react-router-dom";
 import { preloadImages } from "@/hooks/useImagePreloader";
@@ -95,34 +95,39 @@ const Index = () => {
             </div>
 
             {/* Category Tabs */}
-            <div className="mb-8 flex justify-center">
-              <Tabs value={selectedCategory} onValueChange={setSelectedCategory} className="w-full">
-                <TabsList className="w-full flex-wrap h-auto gap-3 bg-muted/50 p-2">
-                  {categories.map((category) => {
-                    const categoryImage = getCategoryImage(category);
-                    return (
-                      <TabsTrigger 
-                        key={category} 
-                        value={category}
-                        className="capitalize flex-col h-auto py-3 px-4 gap-2 data-[state=active]:bg-background data-[state=active]:shadow-md"
-                      >
-                        {categoryImage && (
-                          <div className="w-12 h-12 rounded-md overflow-hidden bg-muted">
-                            <img 
-                              src={categoryImage} 
-                              alt={category}
-                              className="w-full h-full object-cover"
-                            />
-                          </div>
-                        )}
-                        <span className="text-xs font-medium">
-                          {category === "all" ? "All Products" : category}
-                        </span>
-                      </TabsTrigger>
-                    );
-                  })}
-                </TabsList>
-              </Tabs>
+            <div className="mb-8 overflow-x-auto">
+              <div className="flex gap-4 pb-2 min-w-max px-4 sm:justify-center">
+                {categories.map((category) => {
+                  const categoryImage = getCategoryImage(category);
+                  const isActive = selectedCategory === category;
+                  return (
+                    <button
+                      key={category}
+                      onClick={() => setSelectedCategory(category)}
+                      className={`flex flex-col items-center gap-2 p-3 rounded-lg transition-all duration-300 min-w-[100px] ${
+                        isActive 
+                          ? 'bg-primary text-primary-foreground shadow-lg scale-105' 
+                          : 'bg-muted/50 hover:bg-muted hover:scale-102'
+                      }`}
+                    >
+                      {categoryImage && (
+                        <div className={`w-16 h-16 rounded-md overflow-hidden ${
+                          isActive ? 'ring-2 ring-primary-foreground/50' : ''
+                        }`}>
+                          <img 
+                            src={categoryImage} 
+                            alt={category}
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
+                      )}
+                      <span className="text-xs font-medium capitalize text-center">
+                        {category === "all" ? "All" : category}
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
             </div>
             
             <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-6">
