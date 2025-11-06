@@ -28,6 +28,12 @@ const Index = () => {
     return ["all", ...uniqueCategories];
   }, [products]);
 
+  const getCategoryImage = (category: string) => {
+    if (category === "all") return products[0]?.image || "";
+    const categoryProduct = products.find(p => p.category === category);
+    return categoryProduct?.image || "";
+  };
+
   const filteredProducts = useMemo(() => {
     let filtered = products;
     
@@ -91,16 +97,30 @@ const Index = () => {
             {/* Category Tabs */}
             <div className="mb-8 flex justify-center">
               <Tabs value={selectedCategory} onValueChange={setSelectedCategory} className="w-full">
-                <TabsList className="w-full flex-wrap h-auto gap-2 bg-muted/50">
-                  {categories.map((category) => (
-                    <TabsTrigger 
-                      key={category} 
-                      value={category}
-                      className="capitalize"
-                    >
-                      {category === "all" ? "All Products" : category}
-                    </TabsTrigger>
-                  ))}
+                <TabsList className="w-full flex-wrap h-auto gap-3 bg-muted/50 p-2">
+                  {categories.map((category) => {
+                    const categoryImage = getCategoryImage(category);
+                    return (
+                      <TabsTrigger 
+                        key={category} 
+                        value={category}
+                        className="capitalize flex-col h-auto py-3 px-4 gap-2 data-[state=active]:bg-background data-[state=active]:shadow-md"
+                      >
+                        {categoryImage && (
+                          <div className="w-12 h-12 rounded-md overflow-hidden bg-muted">
+                            <img 
+                              src={categoryImage} 
+                              alt={category}
+                              className="w-full h-full object-cover"
+                            />
+                          </div>
+                        )}
+                        <span className="text-xs font-medium">
+                          {category === "all" ? "All Products" : category}
+                        </span>
+                      </TabsTrigger>
+                    );
+                  })}
                 </TabsList>
               </Tabs>
             </div>
