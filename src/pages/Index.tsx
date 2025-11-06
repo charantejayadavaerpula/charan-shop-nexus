@@ -94,9 +94,9 @@ const Index = () => {
               </h2>
             </div>
 
-            {/* Category Tabs */}
-            <div className="mb-8 overflow-x-auto">
-              <div className="flex gap-4 pb-2 min-w-max px-4 sm:justify-center">
+            {/* Category Filter */}
+            <div className="mb-8">
+              <div className="flex gap-3 overflow-x-auto pb-4 px-1 scrollbar-hide">
                 {categories.map((category) => {
                   const categoryImage = getCategoryImage(category);
                   const isActive = selectedCategory === category;
@@ -104,26 +104,37 @@ const Index = () => {
                     <button
                       key={category}
                       onClick={() => setSelectedCategory(category)}
-                      className={`flex flex-col items-center gap-2 p-3 rounded-lg transition-all duration-300 min-w-[100px] ${
+                      className={`group relative flex-shrink-0 rounded-xl overflow-hidden transition-all duration-300 ${
                         isActive 
-                          ? 'bg-primary text-primary-foreground shadow-lg scale-105' 
-                          : 'bg-muted/50 hover:bg-muted hover:scale-102'
+                          ? 'ring-2 ring-primary shadow-lg' 
+                          : 'hover:shadow-md'
                       }`}
                     >
-                      {categoryImage && (
-                        <div className={`w-16 h-16 rounded-md overflow-hidden ${
-                          isActive ? 'ring-2 ring-primary-foreground/50' : ''
-                        }`}>
+                      <div className="relative w-32 h-32">
+                        {categoryImage && (
                           <img 
                             src={categoryImage} 
                             alt={category}
-                            className="w-full h-full object-cover"
+                            className={`w-full h-full object-cover transition-all duration-300 ${
+                              isActive ? 'scale-110' : 'group-hover:scale-105'
+                            }`}
                           />
+                        )}
+                        <div className={`absolute inset-0 transition-all duration-300 ${
+                          isActive 
+                            ? 'bg-primary/60' 
+                            : 'bg-black/40 group-hover:bg-black/30'
+                        }`} />
+                        <div className="absolute inset-0 flex items-center justify-center">
+                          <span className={`text-white font-semibold text-sm capitalize px-3 py-1 rounded-full transition-all duration-300 ${
+                            isActive 
+                              ? 'bg-white/30 backdrop-blur-sm' 
+                              : 'group-hover:bg-white/20'
+                          }`}>
+                            {category === "all" ? "All Products" : category}
+                          </span>
                         </div>
-                      )}
-                      <span className="text-xs font-medium capitalize text-center">
-                        {category === "all" ? "All" : category}
-                      </span>
+                      </div>
                     </button>
                   );
                 })}
