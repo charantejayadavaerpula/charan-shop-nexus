@@ -2,8 +2,8 @@ import Navigation from "@/components/Navigation";
 import Hero from "@/components/Hero";
 import PromoBanner from "@/components/PromoBanner";
 import ProductCard from "@/components/ProductCard";
+import ProductDetailModal from "@/components/ProductDetailModal";
 import { useEffect, useState, useMemo } from "react";
-
 import { supabase } from "@/integrations/supabase/client";
 import { useSearchParams } from "react-router-dom";
 import { preloadImages } from "@/hooks/useImagePreloader";
@@ -14,6 +14,8 @@ interface Product {
   price: number;
   category: string;
   image: string;
+  description?: string;
+  variants?: any[];
 }
 
 const Index = () => {
@@ -22,6 +24,8 @@ const Index = () => {
   const [searchParams] = useSearchParams();
   const searchQuery = searchParams.get("search") || "";
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const categories = useMemo(() => {
     const uniqueCategories = Array.from(new Set(products.map(p => p.category)));
@@ -66,7 +70,7 @@ const Index = () => {
       if (error) {
         console.error("Error fetching products:", error);
       } else if (data) {
-        setProducts(data);
+        setProducts(data as Product[]);
         // Preload all product images
         preloadImages(data.map(p => p.image));
       }
@@ -154,12 +158,24 @@ const Index = () => {
                 </div>
               ) : (
                 filteredProducts.map((product) => (
-                  <ProductCard key={product.id} {...product} />
+                  <div key={product.id} onClick={() => {
+                    setSelectedProduct(product);
+                    setIsModalOpen(true);
+                  }} className="cursor-pointer">
+                    <ProductCard {...product} />
+                  </div>
                 ))
               )}
             </div>
           </div>
         </section>
+
+        {/* Product Detail Modal */}
+        <ProductDetailModal 
+          product={selectedProduct}
+          open={isModalOpen}
+          onOpenChange={setIsModalOpen}
+        />
       </main>
       
       {/* Footer */}

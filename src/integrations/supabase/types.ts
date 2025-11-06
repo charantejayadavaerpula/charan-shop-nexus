@@ -23,6 +23,7 @@ export type Database = {
           image: string
           name: string
           price: number
+          variants: Json | null
         }
         Insert: {
           category: string
@@ -32,6 +33,7 @@ export type Database = {
           image: string
           name: string
           price: number
+          variants?: Json | null
         }
         Update: {
           category?: string
@@ -41,6 +43,7 @@ export type Database = {
           image?: string
           name?: string
           price?: number
+          variants?: Json | null
         }
         Relationships: []
       }

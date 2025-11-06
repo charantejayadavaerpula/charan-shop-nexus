@@ -20,7 +20,8 @@ const ProductCard = ({ id, name, price, image, category }: ProductCardProps) => 
   const isWishlisted = isInWishlist(id);
   const imageLoaded = useImagePreloader(image);
 
-  const handleWishlistToggle = () => {
+  const handleWishlistToggle = (e: React.MouseEvent) => {
+    e.stopPropagation();
     if (isWishlisted) {
       removeFromWishlist(id);
     } else {
@@ -28,7 +29,8 @@ const ProductCard = ({ id, name, price, image, category }: ProductCardProps) => 
     }
   };
 
-  const handleAddToCart = () => {
+  const handleAddToCart = (e: React.MouseEvent) => {
+    e.stopPropagation();
     addToCart({ id, name, price, image, category });
   };
 
